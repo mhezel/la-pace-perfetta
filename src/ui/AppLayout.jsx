@@ -4,7 +4,7 @@ import Header from "./Header";
 import styled from "styled-components";
 
 const Main = styled.main`
-  background-color: green;
+  // background-color: green;
   padding: 4rem 4.8rem 6.4rem;
 `;
 
@@ -18,12 +18,12 @@ const StyledAppLayout = styled.div`
 function AppLayout() {
   return (
     <StyledAppLayout>
-      <Header/>
-      <Sidebar/>
+      <Header />
+      <Sidebar />
       <Main>
-        <Outlet/>
+        <Outlet />
       </Main>
     </StyledAppLayout>
-  )
+  );
 }
 export default AppLayout;
