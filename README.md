@@ -1,5 +1,5 @@
 # la-pace-perfetta 
- Cabin Booking Management System|React Router|Styled Components|React Query|Context API|React Hook Form|Supabase
+ Cabin Booking Management System
 
 TECH STACK 🚀
 * React Router => routing
