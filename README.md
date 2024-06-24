@@ -7,4 +7,4 @@ TECH STACK 🚀
 * React Query => remote state management
 * Context API => ui state management
 * React Hook Form => form management
-* Supabase => storing remote states, data from the api 
+* Supabase => buckets for storing remote states, data from the api 
