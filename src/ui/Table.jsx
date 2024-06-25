@@ -62,43 +62,40 @@ const Empty = styled.p`
 //creating a compound component table for reusability
 const TableContext = createContext();
 
-function Table({children, columns}){
+function Table({ children, columns }) {
+  return (
+    <TableContext.Provider value={{ columns }}>
+      <StyledTable role="table">{children}</StyledTable>
+    </TableContext.Provider>
+  );
+}
 
-  return <TableContext.Provider value={{columns}}>
-    <StyledTable role="table">
+function Header({ children }) {
+  const { columns } = useContext(TableContext);
+  return (
+    <StyledHeader role="row" columns={columns} as="header">
       {children}
-    </StyledTable>
-  </TableContext.Provider>
+    </StyledHeader>
+  );
 }
 
-function Header({children}){
-
-  const {columns} = useContext(TableContext);
-  return <StyledHeader role="row" columns={columns} as="header">
-    {children}
-  </StyledHeader>
+function Row({ children }) {
+  const { columns } = useContext(TableContext);
+  return (
+    <StyledRow role="row" columns={columns}>
+      {children}
+    </StyledRow>
+  );
 }
 
-function Row({children}){
-  const {columns} = useContext(TableContext);
-  return <StyledRow role="row" columns={columns}>
-    {children}
-  </StyledRow>
-}
-
-function Body({data, render}){
-
-  if(!data.length) return <Empty>No cabin data to show at the moment</Empty>;
-
-  return <StyledBody>
-    {data.map(render)}
-  </StyledBody>
+function Body({ data, render }) {
+  if (!data.length) return <Empty>No cabin data to show at the moment</Empty>;
+  return <StyledBody>{data.map(render)}</StyledBody>;
 }
 
 Table.Header = Header;
 Table.Row = Row;
 Table.Body = Body;
 Table.Footer = Footer;
-
 
 export default Table;

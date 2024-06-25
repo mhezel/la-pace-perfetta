@@ -2,7 +2,7 @@ import { cloneElement, createContext, useContext, useState } from "react";
 import { createPortal } from "react-dom";
 import { HiX } from "react-icons/hi";
 import styled from "styled-components";
-import useOutsideClick from "../hooks/useOutsideClick";
+import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -55,40 +55,39 @@ const Button = styled.button`
 
 const ModalContext = createContext();
 
-function Modal({children}){
-  const [openName, setOpenName] = useState('');
-  const close = () => setOpenName('');
-  const open = (name) => setOpenName(name); 
+function Modal({ children }) {
+  const [openName, setOpenName] = useState("");
+  const close = () => setOpenName("");
+  const open = (opensWindowName) => setOpenName(opensWindowName);
 
-  return(
-    <ModalContext.Provider value={{openName, close, open}}>
+  return (
+    <ModalContext.Provider value={{ openName, close, open }}>
       {children}
     </ModalContext.Provider>
   );
 }
 
-function Open({ children, opens: opensWindowName }){
+function Open({ children, opens: opensWindowName }) {
   const { open } = useContext(ModalContext);
   return cloneElement(children, { onClick: () => open(opensWindowName) });
 }
 
 function Window({ children, name }) {
-  const {openName, close} = useContext(ModalContext);
+  const { openName, close } = useContext(ModalContext);
+  const ref = useOutsideClick(close);
 
-  const {ref} = useOutsideClick(close);
+  if (name !== openName) return null;
 
-  if(name !== openName) return null;
+  console.log("openName:", openName, "name:", name);
 
-  return createPortal ( 
+  return createPortal(
     <Overlay>
       <StyledModal ref={ref}>
         <Button onClick={close}>
-          <HiX/>
+          <HiX />
         </Button>
 
-        <div>
-          {cloneElement(children, {onCloseModal: close})}
-        </div>
+        <div>{cloneElement(children, { onCloseModal: close })}</div>
       </StyledModal>
     </Overlay>,
     document.body
@@ -99,4 +98,3 @@ Modal.Open = Open;
 Modal.Window = Window;
 
 export default Modal;
-

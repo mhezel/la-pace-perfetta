@@ -1,5 +1,4 @@
 import { useGetCabin } from "./useGetCabin";
-import styled from "styled-components";
 import Spinner from "../../ui/Spinner";
 import CabinRow from "./CabinRow";
 import Table from "../../ui/Table";
@@ -44,11 +43,9 @@ function CabinTable() {
           <div>Discount</div>
           <div>Action</div>
         </Table.Header>
-        <Table.Body 
-          data={ cabins }
-          render={
-            cabin => <CabinRow cabin={cabin} key={cabin.cabin_id} />
-          }
+        <Table.Body
+          data={cabins}
+          render={(cabin) => <CabinRow cabin={cabin} key={cabin.cabin_id} />}
         />
       </Table>
     </Menus>
