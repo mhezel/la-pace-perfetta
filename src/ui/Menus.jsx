@@ -36,8 +36,8 @@ const StyledList = styled.ul`
   box-shadow: var(--shadow-md);
   border-radius: var(--border-radius-md);
 
-  right: ${(props) => (props.position ? props.position.x : 0)}px;
-  top: ${(props) => (props.position ? props.position.y : 0)}px;
+  right: ${(props) => props.position.x}px;
+  top: ${(props) => props.position.y}px;
 `;
 
 const StyledButton = styled.button`
@@ -69,33 +69,32 @@ const MenusContext = createContext();
 
 function Menus({ children }) {
   const [openId, setOpenId] = useState("");
-  // const [position, setPosition] = useState(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState(null);
+  // const [position, setPosition] = useState({ x: 0, y: 0 });
 
   const close = () => setOpenId("");
   const open = setOpenId;
 
   return (
-    <MenusContext.Provider value={{ openId, close, open, setPosition }}>
+    <MenusContext.Provider
+      value={{ openId, close, open, position, setPosition }}
+    >
       {children}
     </MenusContext.Provider>
   );
 }
 
-function Toggle({ cabin_id }) {
+function Toggle({ id }) {
   const { setPosition, openId, open, close } = useContext(MenusContext);
 
   function handleClick(e) {
     const rect = e.target.closest("button").getBoundingClientRect();
-
-    console.log(rect);
-
     setPosition({
       x: window.innerWidth - rect.width - rect.x,
       y: rect.y + rect.height + 8,
     });
 
-    openId === "" || openId !== cabin_id ? open(cabin_id) : close();
+    openId === "" || openId !== id ? open(id) : close();
   }
 
   return (
@@ -105,11 +104,12 @@ function Toggle({ cabin_id }) {
   );
 }
 
-function List({ cabin_id, children }) {
+function List({ id, children }) {
   const { openId, position, close } = useContext(MenusContext);
   const ref = useOutsideClick(close);
 
-  if (openId !== cabin_id) return null;
+  if (openId !== id) return null;
+  // console.log("openId:", openId, "id:", id); true
 
   return createPortal(
     <StyledList position={position} ref={ref}>
