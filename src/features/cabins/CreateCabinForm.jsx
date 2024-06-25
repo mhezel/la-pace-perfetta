@@ -8,7 +8,7 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
 
-function CreateCabinForm({ cabinToEdit = {}, setShowForm }) {
+function CreateCabinForm({ cabinToEdit = {}, setShowForm , onCloseModal}) {
   const { cabin_id: editId, ...editValues } = cabinToEdit;
   const isEditSession = Boolean(editId);
   const { register, handleSubmit, reset, getValues, formState } = useForm({
@@ -29,12 +29,22 @@ function CreateCabinForm({ cabinToEdit = {}, setShowForm }) {
     if (isEditSession)
       editCabin(
         { newCabinData: { ...data, cabin_img: image }, id: editId },
-        { onSuccess: () => reset() } //reset function from react-hook-form can be called here on the mutation
+        { onSuccess: () => 
+          {
+            reset(); //reset function from react-hook-form can be called here on the mutation 
+            onCloseModal?.(); //close modal after submitting form-data
+          }
+        } 
       );
     else
       createCabin(
         { ...data, cabin_img: image },
-        { onSuccess: () => reset() } //reset function from react-hook-form can be called here on the mutation
+        { onSuccess: () =>
+          {
+            reset();  //reset function from react-hook-form can be called here on the mutation
+            onCloseModal?.(); //close modal after submitting form-data
+          },
+        }, 
       );
   }
 
@@ -45,7 +55,7 @@ function CreateCabinForm({ cabinToEdit = {}, setShowForm }) {
   const isWorking = isCreating || isEditing;
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form onSubmit={handleSubmit(onSubmit, onError)} type={onCloseModal ? "modal" : "regular"}>
       <FormRow label="Cabin name" error={errors?.cabin_name?.message}>
         <Input
           type="text"
@@ -134,11 +144,12 @@ function CreateCabinForm({ cabinToEdit = {}, setShowForm }) {
         <Button
           variation="secondary"
           type="reset"
-          onClick={() => setShowForm((showForm) => !showForm)}
+          onClick={() => onCloseModal?.()}
         >
           Cancel
         </Button>
-        <Button disabled={isWorking}>
+        <Button 
+          disabled={isWorking}>
           {isEditSession ? "Edit Cabin" : "Create Cabin"}
         </Button>
       </FormRow>

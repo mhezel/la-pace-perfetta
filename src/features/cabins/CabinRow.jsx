@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { formatCurrency } from "../../utils/helpers";
 import { useDeleteCabin } from "./useDeleteCabin";
 import { HiSquare2Stack } from "react-icons/hi2";
@@ -6,6 +5,8 @@ import { HiPencil, HiTrash } from "react-icons/hi";
 import { useCreateCabin } from "./useCreateCabin";
 import CreateCabinForm from "./CreateCabinForm";
 import styled from "styled-components";
+import Modal from "../../ui/Modal";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 
 const TableRow = styled.div`
   display: grid;
@@ -47,7 +48,6 @@ const Discount = styled.div`
 `;
 
 function CabinRow({ cabin }) {
-  const [showForm, setShowForm] = useState(false);
   const { isDeleting, deleteCabin } = useDeleteCabin();
   const { isCreating, createCabin } = useCreateCabin();
 
@@ -71,7 +71,6 @@ function CabinRow({ cabin }) {
   }
 
   return (
-    <>
       <TableRow role="row">
         <Img src={cabin_img} alt={`${cabin_name} image`} />
         <Cabin>{cabin_name}</Cabin>
@@ -86,18 +85,29 @@ function CabinRow({ cabin }) {
           <button onClick={HandleDuplicate} disabled={isCreating}>
             <HiSquare2Stack />
           </button>
-          <button onClick={() => setShowForm((showForm) => !showForm)}>
-            <HiPencil />
-          </button>
-          <button onClick={() => deleteCabin(cabin_id)} disabled={isDeleting}>
+
+        <Modal>
+          <Modal.Open opens="edit">
+            <button>
+              <HiPencil />
+            </button>
+          </Modal.Open>
+          <Modal.Window name="edit">
+            <CreateCabinForm cabinToEdit={cabin} />
+          </Modal.Window>
+
+          <Modal.Open opens="delete">
+          <button>
             <HiTrash />
           </button>
+          </Modal.Open>
+
+          <Modal.Window name="delete">
+            <ConfirmDelete resourceName="cabins" disabled={isDeleting} onConfirm={() => deleteCabin(cabin_id)}/>
+          </Modal.Window>
+        </Modal>
         </div>
       </TableRow>
-      {showForm && (
-        <CreateCabinForm cabinToEdit={cabin} setShowForm={setShowForm} />
-      )}
-    </>
   );
 }
 export default CabinRow;
