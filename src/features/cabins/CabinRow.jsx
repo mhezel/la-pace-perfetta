@@ -72,7 +72,7 @@ function CabinRow({ cabin }) {
     });
   }
 
-  console.log(cabin_id);
+  // console.log(cabin_id);
 
   return (
     <Table.Row role="row">
