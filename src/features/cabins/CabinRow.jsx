@@ -84,7 +84,7 @@ function CabinRow({ cabin }) {
           <span>&mdash;</span>
         )}
         <div>
-          <button disabled={isCreating}>
+          <button disabled={isCreating} onClick={HandleDuplicate}>
             <HiSquare2Stack />
           </button>
             <Modal>
