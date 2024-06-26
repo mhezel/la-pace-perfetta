@@ -95,7 +95,7 @@ function CabinRow({ cabin }) {
             <Menus.List id={cabin_id}>
               {" "}
               /{/* DUPLICATE MODAL */}
-              <Menus.Button icon={<HiSquare2Stack />} onClick={handleDuplicate}>
+              <Menus.Button icon={<HiSquare2Stack />} onClick={handleDuplicate} isCreating={isCreating}>
                 Duplicate
               </Menus.Button>
               {/* EDIT MODAL */}

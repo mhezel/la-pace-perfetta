@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { isFuture, isPast, isToday } from "date-fns";
-import supabase from "../services/supabase";
-import Button from "../ui/Button";
 import { subtractDates } from "../utils/helpers";
-
 import { bookings } from "./data-bookings";
 import { cabins } from "./data-cabins";
 import { guests } from "./data-guests";
+import supabase from "../services/supabase";
+import Button from "../ui/Button";
 
 // const originalSettings = {
 //   minBookingLength: 3,
@@ -16,87 +15,100 @@ import { guests } from "./data-guests";
 // };
 
 async function deleteGuests() {
-  const { error } = await supabase.from("guests").delete().gt("id", 0);
+  const { error } = await supabase.from("tbl_guests").delete().gt("guest_id", 0);
   if (error) console.log(error.message);
 }
 
 async function deleteCabins() {
-  const { error } = await supabase.from("cabins").delete().gt("id", 0);
+  const { error } = await supabase.from("tbl_cabins").delete().gt("cabin_id", 0);
   if (error) console.log(error.message);
 }
 
 async function deleteBookings() {
-  const { error } = await supabase.from("bookings").delete().gt("id", 0);
+  const { error } = await supabase.from("tbl_bookings").delete().gt("booking_id", 0);
   if (error) console.log(error.message);
 }
 
 async function createGuests() {
-  const { error } = await supabase.from("guests").insert(guests);
+  const { error } = await supabase.from("tbl_guests").insert(guests);
   if (error) console.log(error.message);
 }
 
 async function createCabins() {
-  const { error } = await supabase.from("cabins").insert(cabins);
+  const { error } = await supabase.from("tbl_cabins").insert(cabins);
   if (error) console.log(error.message);
 }
 
-async function createBookings() {
-  // Bookings need a guestId and a cabinId. We can't tell Supabase IDs for each object, it will calculate them on its own. So it might be different for different people, especially after multiple uploads. Therefore, we need to first get all guestIds and cabinIds, and then replace the original IDs in the booking data with the actual ones from the DB
-  const { data: guestsIds } = await supabase
-    .from("guests")
-    .select("id")
-    .order("id");
-  const allGuestIds = guestsIds.map((cabin) => cabin.id);
-  const { data: cabinsIds } = await supabase
-    .from("cabins")
-    .select("id")
-    .order("id");
-  const allCabinIds = cabinsIds.map((cabin) => cabin.id);
 
-  const finalBookings = bookings.map((booking) => {
+async function createBookings() {
+  // Bookings need a guestId and a cabinId. We can't tell Supabase IDs for each object, 
+  // it will calculate them on its own. So it might be different for different people, 
+  // especially after multiple uploads. Therefore, we need to first get all guestIds and cabinIds, 
+  // and then replace the original IDs in the booking data with the actual ones from the DB
+  const { data: guestIDs } = await supabase
+    .from("tbl_guests")
+    .select("guest_id")
+    .order("guest_id");
+  const allGuestIds = guestIDs.map((guest) => guest.guest_id);
+
+  const { data: cabinsIds } = await supabase
+    .from("tbl_cabins")
+    .select("cabin_id")
+    .order("cabin_id");
+  const allCabinIds = cabinsIds.map((cabin) => cabin.cabin_id);
+
+  console.log("guestIDS1:", guestIDs);
+  console.log("guestIDS1:", cabinsIds);
+
+  console.log("allGuestIds:", allGuestIds);
+  console.log("allCabinIds:", allCabinIds);
+  
+
+
+    const finalBookings = bookings.map((booking) => {
     // Here relying on the order of cabins, as they don't have and ID yet
-    const cabin = cabins.at(booking.cabinId - 1);
-    const numNights = subtractDates(booking.endDate, booking.startDate);
-    const cabinPrice = numNights * (cabin.regularPrice - cabin.discount);
-    const extrasPrice = booking.hasBreakfast
-      ? numNights * 15 * booking.numGuests
+    const cabin = cabins.at(booking.cabin_id - 1);
+    const booking_numNights = subtractDates(booking.booking_endDate, booking.booking_startDate);
+    const booking_cabinPrice = booking_numNights * (cabin.cabin_price - cabin.cabin_discount);
+    const booking_extraPrice = booking.booking_hasBreakfast
+      ? booking_numNights * 15 * booking.booking_numGuests
       : 0; // hardcoded breakfast price
-    const totalPrice = cabinPrice + extrasPrice;
+    const booking_totalPrice = booking_cabinPrice + booking_extraPrice;
 
     let status;
     if (
-      isPast(new Date(booking.endDate)) &&
-      !isToday(new Date(booking.endDate))
+      isPast(new Date(booking.booking_endDate)) &&
+      !isToday(new Date(booking.booking_endDate))
     )
       status = "checked-out";
     if (
-      isFuture(new Date(booking.startDate)) ||
-      isToday(new Date(booking.startDate))
+      isFuture(new Date(booking.booking_startDate)) ||
+      isToday(new Date(booking.booking_startDate))
     )
       status = "unconfirmed";
     if (
-      (isFuture(new Date(booking.endDate)) ||
-        isToday(new Date(booking.endDate))) &&
-      isPast(new Date(booking.startDate)) &&
-      !isToday(new Date(booking.startDate))
+      (isFuture(new Date(booking.booking_endDate)) ||
+        isToday(new Date(booking.booking_endDate))) &&
+      isPast(new Date(booking.booking_startDate)) &&
+      !isToday(new Date(booking.booking_startDate))
     )
-      status = "checked-in";
+    status = "checked-in";
 
     return {
       ...booking,
-      numNights,
-      cabinPrice,
-      extrasPrice,
-      totalPrice,
-      guestId: allGuestIds.at(booking.guestId - 1),
-      cabinId: allCabinIds.at(booking.cabinId - 1),
-      status,
+      booking_numNights,
+      booking_cabinPrice,
+      booking_extraPrice,
+      booking_totalPrice,
+      guest_id: allGuestIds.at(booking.guest_id  - 1), //this returns
+      cabin_id: allCabinIds.at(booking.cabin_id - 1),
+      booking_status: status,
     };
   });
 
   console.log(finalBookings);
 
-  const { error } = await supabase.from("bookings").insert(finalBookings);
+  const { error } = await supabase.from("tbl_bookings").insert(finalBookings);
   if (error) console.log(error.message);
 }
 
