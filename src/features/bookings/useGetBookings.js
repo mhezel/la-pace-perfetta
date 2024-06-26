@@ -10,10 +10,14 @@ export function useGetBookings() {
   const filterValue = searchParams.get("booking_status");
   const filter = !filterValue || filterValue === "all" ? null : {field: "booking_status", value: filterValue}; 
 
+  //SORTING OPTION
+  const sortByRaw = searchParams.get("sortBy") || "startDate-desc";
+  const [field, direction] = sortByRaw.split("-");
+  const sortBy = { field, direction };
 
   const { isLoading: isFetching, data: bookings } = useQuery({
-    queryKey: ["booking", filter],
-    queryFn: () => getAllBooking({ filter }),
+    queryKey: ["booking", filter, sortBy],
+    queryFn: () => getAllBooking({ filter , sortBy}),
   });
 
   return { isFetching, bookings };
