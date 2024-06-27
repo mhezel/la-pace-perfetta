@@ -18,7 +18,6 @@ const StyledCheckbox = styled.div`
 
   & label {
     flex: 1;
-
     display: flex;
     align-items: center;
     gap: 0.8rem;

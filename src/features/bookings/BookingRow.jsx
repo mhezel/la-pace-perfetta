@@ -1,16 +1,13 @@
-import styled from "styled-components";
-import { format, isToday } from "date-fns";
-
-import Tag from "../../ui/Tag";
-import Table from "../../ui/Table";
-
+import { format, isToday, getYear, getMonth } from "date-fns";
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
-
-import Menus from "../../ui/Menus";
 import { HiEye } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import { HiArrowDownOnSquare } from "react-icons/hi2";
+import styled from "styled-components";
+import Menus from "../../ui/Menus";
+import Tag from "../../ui/Tag";
+import Table from "../../ui/Table";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -59,15 +56,27 @@ function BookingRow({
 
   const navigate = useNavigate();
 
+  // FORMAT BOOKING-REF-ID #
+  // Get the first letter of the first name and last name of the guest
+  const [firstName, lastName] = guestName.split(" ");
+  const guestInitials = `${firstName.charAt(0)}${
+    lastName ? lastName.charAt(0) : ""
+  }`;
+  // Get the last two digits of the current year
+  const lastTwoDigitsOfYear = getYear(new Date()).toString().slice(-2);
+  // Get the current month (zero-indexed), add 1 to match human-readable format
+  const currentMonth = getMonth(new Date()) + 1;
+  // Reference ID format: id-lastTwoDigitsOfYearcurrentMonth[Guest Initials]
+  const referenceId = `${id}-${lastTwoDigitsOfYear}${currentMonth}${guestInitials}`;
+
   return (
     <Table.Row>
+      <div>{referenceId}</div>
       <Cabin>{cabinName}</Cabin>
-
       <Stacked>
         <span>{guestName}</span>
         <span>{email}</span>
       </Stacked>
-
       <Stacked>
         <span>
           {isToday(new Date(startDate))
@@ -80,11 +89,8 @@ function BookingRow({
           {format(new Date(endDate), "MMM dd yyyy")}
         </span>
       </Stacked>
-
       <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
-
       <Amount>{formatCurrency(totalPrice)}</Amount>
-
       <Menus.Menu>
         <Menus.Toggle id={id} />
         <Menus.List id={id}>

@@ -8,10 +8,11 @@ export function useCheckin() {
   const navigate = useNavigate();
   const { mutate: checkin, isLoading: isCheckingIn } = useMutation({
     //mutate === data ; in return
-    mutationFn: (booking_id) =>
+    mutationFn: ({ booking_id, breakfast }) =>
       updateBooking(booking_id, {
         booking_status: "checked-in", //table data that needs to be updated
         booking_isPaid: true,
+        ...breakfast,
       }),
 
     //handle api call returns

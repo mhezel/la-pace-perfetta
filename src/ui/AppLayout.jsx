@@ -4,7 +4,7 @@ import Header from "./Header";
 import styled from "styled-components";
 
 const Main = styled.main`
-  background-color: var(--color-grey-100);
+  // background-color: var(--color-grey-100);
   padding: 4rem 4.8rem 6.4rem;
   overflow: scroll;
 `;
@@ -17,11 +17,12 @@ const StyledAppLayout = styled.div`
 `;
 
 const Container = styled.div`
-  max-width: 120rem;
+  max-width: 150rem;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 3.2rem;
+  // background-color: var(--color-grey-500);
 `;
 
 function AppLayout() {
