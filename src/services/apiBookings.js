@@ -121,9 +121,12 @@ export async function updateBooking(booking_id, obj) {
   return data;
 }
 
-export async function deleteBooking(id) {
+export async function deleteBooking(booking_id) {
   // REMEMBER RLS POLICIES
-  const { data, error } = await supabase.from("bookings").delete().eq("id", id);
+  const { data, error } = await supabase
+    .from("tbl_bookings")
+    .delete()
+    .eq("booking_id", booking_id);
 
   if (error) {
     console.error(error);

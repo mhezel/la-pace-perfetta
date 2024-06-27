@@ -78,15 +78,12 @@ function Window({ children, name }) {
 
   if (name !== openName) return null;
 
-  console.log("openName:", openName, "name:", name);
-
   return createPortal(
     <Overlay>
       <StyledModal ref={ref}>
         <Button onClick={close}>
           <HiX />
         </Button>
-
         <div>{cloneElement(children, { onCloseModal: close })}</div>
       </StyledModal>
     </Overlay>,
