@@ -9,6 +9,8 @@ import ButtonText from "../../ui/ButtonText";
 import Spinner from "../../ui/Spinner";
 import { useMoveBack } from "../../hooks/useMoveBack";
 import { useGetBooking } from "./useGetBooking";
+import { HiArrowDownOnSquare } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -20,6 +22,7 @@ function BookingDetail() {
   const { isFetching, booking } = useGetBooking();
   // const status = "checked-in";
   const moveBack = useMoveBack();
+  const navigate = useNavigate();
 
   if (isFetching) return <Spinner />;
 
@@ -44,7 +47,17 @@ function BookingDetail() {
       <BookingDataBox booking={booking} />
 
       <ButtonGroup>
-        <Button variation="secondary" onClick={moveBack}>
+        {(booking.booking_isPaid && booking.booking_status === "checked-in") ||
+        booking.booking_status === "checked-out" ? null : (
+          <Button
+            variations="primary"
+            icon={<HiArrowDownOnSquare />}
+            onClick={() => navigate(`/checkin/${booking.booking_id}`)}
+          >
+            Check-in
+          </Button>
+        )}
+        <Button variations="secondary" onClick={moveBack}>
           Back
         </Button>
       </ButtonGroup>

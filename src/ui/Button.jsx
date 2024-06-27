@@ -29,6 +29,18 @@ const variations = {
       background-color: var(--color-brand-700);
     }
   `,
+
+  disabled: css`
+    color: var(--color-brand-50);
+    background-color: var(--color-brand-600);
+    opacity: 0.5;
+    pointer-events: none;
+
+    &:hover {
+      background-color: var(--color-brand-700);
+    }
+  `,
+
   secondary: css`
     color: var(--color-grey-600);
     background: var(--color-grey-0);
@@ -52,9 +64,9 @@ const Button = styled.button`
   border: none;
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-sm);
-  
-  ${(props) =>sizes[props.size]}
-  ${(props) =>variations[props.variations]}
+
+  ${(props) => sizes[props.size]}
+  ${(props) => variations[props.variations]}
 `;
 
 Button.defaultProps = {
@@ -63,4 +75,3 @@ Button.defaultProps = {
 };
 
 export default Button;
-
