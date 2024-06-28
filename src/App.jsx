@@ -14,6 +14,7 @@ import GlobalStyles from "./styles/GlobalStyles";
 import AppLayout from "./ui/AppLayout";
 import Booking from "./pages/Booking";
 import Checkin from "./pages/Checkin";
+import ProtectedRoute from "./ui/ProtectedRoute";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,7 +31,13 @@ function App() {
       <GlobalStyles />
       <BrowserRouter>
         <Routes>
-          <Route element={<AppLayout />}>
+          <Route element={
+            // protected-route to enabled auth users only to access routes
+            <ProtectedRoute>  
+              <AppLayout />
+            </ProtectedRoute>
+            }
+          >
             <Route
               index="dashboard"
               element={<Navigate replace to="dashboard" />}
