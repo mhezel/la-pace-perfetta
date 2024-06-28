@@ -3,6 +3,7 @@ import ButtonIcon from "./ButtonIcon";
 import { HiOutlineUser } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import Logout from "../features/authentication/Logout";
+import SwitchModeToggle from "./SwitchModeToggle";
 
 const StyledHeaderMenu = styled.ul`
     display: flex;
@@ -18,6 +19,7 @@ function HeaderMenu() {
                 <HiOutlineUser/>
             </ButtonIcon>
         </li>
+        <li><SwitchModeToggle/></li>
         <li><Logout/></li>
         </StyledHeaderMenu>
     );

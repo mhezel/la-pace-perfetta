@@ -139,6 +139,7 @@ function BookingRow({
 
         <Modal.Window name="delete">
           <ConfirmDelete
+            disabled={isDeleting}
             resourceName="booking"
             onConfirm={() => {
               deleteBooking(id);
@@ -151,15 +152,3 @@ function BookingRow({
 }
 
 export default BookingRow;
-
-// {status === "checked-out" && (
-//   <Menus.Button
-//     icon={<HiX />}
-//     disabled={isDeleting}
-//     onClick={() => {
-//       remove(id);
-//     }}
-//   >
-//     Delete Booking
-//   </Menus.Button>
-// )}
