@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useSignup } from "./useSignup";
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
@@ -7,16 +8,21 @@ import Input from "../../ui/Input";
 // Email regex: /\S+@\S+\.\S+/
 
 function SignUpForm() {
-    const { register, formState, getValues, handleSubmit } = useForm();
+    const { register, formState, getValues, handleSubmit, reset } = useForm();
     const { errors } = formState;
+    const {isSigningup, signup} = useSignup();
 
-    function onSubmit(data) {
-        console.log(data);
+    function onSubmit({fullName, email, password}) {
+        signup({fullName, email, password}, {
+            onSettled: () => reset(),
+        });
     }
+
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
             <FormRow label="Full name" error={errors?.fullName?.message}>
                 <Input
+                    disabled={isSigningup}
                     type="text"
                     id="fullName"
                     {...register("fullName", { required: "This field is required" })}
@@ -25,6 +31,7 @@ function SignUpForm() {
 
             <FormRow label="Email address" error={errors?.email?.message}>
                 <Input
+                    disabled={isSigningup}
                     type="email"
                     id="email"
                     {...register("email", {
@@ -42,6 +49,7 @@ function SignUpForm() {
                 error={errors?.password?.message}
             >
                 <Input
+                    disabled={isSigningup}
                     type="password"
                     id="password"
                     {...register("password", {
@@ -59,6 +67,7 @@ function SignUpForm() {
                 error={errors?.passwordConfirm?.message}
             >
                 <Input
+                    disabled={isSigningup}
                     type="password"
                     id="passwordConfirm"
                     {...register("passwordConfirm", {
@@ -71,7 +80,7 @@ function SignUpForm() {
 
             <FormRow>
                 {/* type is an HTML attribute! */}
-                <Button variations="secondary" type="reset">
+                <Button variations="secondary" type="reset" disabled={isSigningup}> 
                     Cancel
                 </Button>
                 <Button>Create new user</Button>

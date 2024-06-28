@@ -6,7 +6,7 @@ export function useLogout() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const {mutate: logout, isLoggingOut} = useMutation({
+  const {mutate: logout, isLoading: isLoggingOut} = useMutation({
     mutationFn: logoutAPI,
     onSuccess: () => {
         queryClient.removeQueries(); //remove queries inside the cache 
