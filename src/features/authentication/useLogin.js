@@ -10,8 +10,8 @@ export function useLogin() {
   const { mutate: login, isLoading } = useMutation({
     mutationFn: ({email, password}) => loginApi({email, password}),
     onSuccess: (user) => {
-        //manually sets data inside the query cache (params: query_key and data)
-        queryClient.setQueryData(['user'], user); 
+        //manually sets data inside the react-query cache (params: query_key and data)
+        queryClient.setQueryData(["user"], user.user); 
         navigate('/dashboard', { replace: true });
     },
     onError: (err) => {
@@ -19,7 +19,6 @@ export function useLogin() {
         toast.error("Provided email or password are incorrect");
     },
   });
-
-
+  
   return {login, isLoading};
 }
