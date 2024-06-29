@@ -1,9 +1,11 @@
+import {Flag} from "../../ui/Flag";
+import { Link, useNavigate } from "react-router-dom";
+import { useCheckout } from "./useCheckout";
 import styled from "styled-components";
 import Tag from "../../ui/Tag";
-import {Flag} from "../../ui/Flag";
 import Button from "../../ui/Button";
-import { Link } from "react-router-dom";
-import { useCheckout } from "./useCheckout";
+import Modal from "../../ui/Modal";
+import ConfirmCheckOut from "../../ui/ConfirmCheckOut";
 
 const StyledTodayItem = styled.li`
   display: grid;
@@ -28,6 +30,7 @@ const Guest = styled.div`
 function TodayItem({activity}) {
 
   const {isCheckingOut, checkout} = useCheckout();
+  const navigate = useNavigate();
 
   const { 
     booking_id, 
@@ -40,6 +43,7 @@ function TodayItem({activity}) {
   } = activity;
 
   return (
+    <Modal>
     <StyledTodayItem>
       {booking_status === "unconfirmed" && <Tag type="green">Arriving</Tag>}
       {booking_status === "checked-in" && <Tag type="blue">Departing</Tag>}
@@ -57,16 +61,43 @@ function TodayItem({activity}) {
       )}
 
       {booking_status === "checked-in" && (
-        <Button 
-          onClick={() => checkout(booking_id)}
-          disabled={isCheckingOut}
-          size="small" 
-          variations="danger" 
-          as={Link} 
-          to={`/bookings/${booking_id}`}>Check-out</Button>
+        <Modal.Open opens="out">
+          <Button variations="danger" disabled={isCheckingOut} size="small">Check-out</Button>
+        </Modal.Open>
       )}
+        <Modal.Window name="out">
+        <ConfirmCheckOut
+            resourceName={`Booking #${booking_id}`}
+            onConfirm={() => {
+              checkout(booking_id, {
+                onSettled: () => navigate(`/bookings/${booking_id}`)});
+            }}
+          ></ConfirmCheckOut>
+        </Modal.Window>
     </StyledTodayItem>
+    </Modal>
   )
 }
-
 export default TodayItem;
+
+
+// {booking.booking_status === "checked-out" && (
+//   <Modal.Open opens="delete">
+//     <Button variations="danger">Delete Booking</Button>
+//   </Modal.Open>
+// )}
+
+// <Button variations="secondary" onClick={moveBack}>
+//   Back
+// </Button>
+// </ButtonGroup>
+
+// <Modal.Window name="delete">
+// <ConfirmDelete
+//   resourceName="booking"
+//   onConfirm={() => {
+//     deleteBooking(booking.booking_id, {onSettled: () => navigate(-1)});
+//     // navigate("/bookings");
+//   }}
+// ></ConfirmDelete>
+// </Modal.Window>
