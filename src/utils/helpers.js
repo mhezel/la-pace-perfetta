@@ -12,6 +12,11 @@ export const formatDistanceFromNow = (dateStr) =>
     .replace("about ", "")
     .replace("in", "In");
 
+export const formatCurrency = (value) =>
+  new Intl.NumberFormat("en", { style: "currency", currency: "USD" }).format(
+    value
+  );
+
 // Supabase needs an ISO date string. However, that string will be different on every render because the MS or SEC have changed, which isn't good. So we use this trick to remove any time
 export const getToday = function (options = {}) {
   const today = new Date();
@@ -23,8 +28,3 @@ export const getToday = function (options = {}) {
   else today.setUTCHours(0, 0, 0, 0);
   return today.toISOString();
 };
-
-export const formatCurrency = (value) =>
-  new Intl.NumberFormat("en", { style: "currency", currency: "USD" }).format(
-    value
-  );
