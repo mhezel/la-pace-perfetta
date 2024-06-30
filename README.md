@@ -1,8 +1,5 @@
 **Admin Project**
 
-**Overview:**
-This admin project leverages modern technologies to deliver a robust and scalable solution for managing administrative tasks efficiently.
-
 **Tech Stack**
 -----------------
 * React Router: Manages dynamic routing within the application.
@@ -22,15 +19,13 @@ This admin project leverages modern technologies to deliver a robust and scalabl
 
 **Client-Side Project**
 
-**Overview**
-This client-side project aims to deliver a seamless user experience with high performance and scalability using NextJS and other modern technologies.
-
 Tech Stack
 ------------------
 * NextJS: A framework providing server-side rendering, static site generation, and routing.
 * TailwindCSS: A utility-first CSS framework for responsive and modern styling.
 * Context API: Manages global UI state efficiently.
 * Supabase: Handles remote state storage and real-time API data.
+  
 **Features**
 * Server-side rendering and static site generation with NextJS.
 * Modular and responsive design using NextJS and TailwindCSS.
