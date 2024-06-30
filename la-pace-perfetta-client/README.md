@@ -1,4 +1,4 @@
-Project: La Pace Perfetta (the Perfect Peace) // Cabin Booking Management System
+Project: La Pace Perfetta (The Perfect Peace) // Cabin Booking Management System
 
 TECH STACK 🚀
 
