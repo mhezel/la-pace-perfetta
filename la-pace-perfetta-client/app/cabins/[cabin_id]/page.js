@@ -8,6 +8,24 @@ export async function generateMetadata({params}){
         title: `Cabin - ${cabin_name}`,
     }
 }
+
+// // Define the getStaticPaths function
+// export async function getStaticPaths() {
+//   const cabins = await getCabin();
+
+//   const paths = cabins.map((cabin) => ({
+//       params: { cabin_id: cabin.cabin_id.toString() }
+//   }));
+
+//   console.log(paths);
+  
+//   return {
+//       paths,
+//       fallback: false, // or 'true' or 'blocking' based on your requirements
+//   };
+
+// }
+
 export default async function Page({params}) {
     const cabin = await getCabin(params.cabin_id);
 
@@ -17,7 +35,7 @@ export default async function Page({params}) {
         cabin_img, 
         cabin_description 
         } = cabin;
- 
+
   return (
     <div className="max-w-6xl mx-auto mt-8">
       <div className="grid grid-cols-[3fr_4fr] gap-20 border border-primary-800 py-3 px-10 mb-24">
