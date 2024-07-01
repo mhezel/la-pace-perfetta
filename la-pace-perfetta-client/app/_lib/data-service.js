@@ -1,7 +1,5 @@
 import { eachDayOfInterval } from 'date-fns';
-
-/////////////
-// GET
+import { supabase } from './supabase';
 
 export async function getCabin(id) {
   const { data, error } = await supabase
@@ -27,6 +25,10 @@ export async function getCabinPrice(id) {
     .eq('id', id)
     .single();
 
+    
+  // For testing
+  // await new Promise((res) => setTimeout(res, 1000));
+
   if (error) {
     console.error(error);
   }
@@ -36,9 +38,9 @@ export async function getCabinPrice(id) {
 
 export const getCabins = async function () {
   const { data, error } = await supabase
-    .from('cabins')
-    .select('id, name, maxCapacity, regularPrice, discount, image')
-    .order('name');
+    .from('tbl_cabins')
+    .select('cabin_id, cabin_name, cabin_max_capacity, cabin_price, cabin_discount, cabin_img')
+    .order('cabin_name');
 
   if (error) {
     console.error(error);
