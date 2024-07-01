@@ -14,7 +14,7 @@ function BookingTable() {
 
   return (
     <Menus>
-      <Table columns="1.0fr 0.6fr 1.5fr 2.0fr 1.4fr 1fr 3.2rem">
+      <Table columns="1.0fr 1.5fr 1.5fr 2.0fr 1.4fr 1fr 3.2rem">
         <Table.Header>
           <div>Booking Ref #</div>
           <div>Cabin</div>
