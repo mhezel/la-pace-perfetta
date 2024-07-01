@@ -4,7 +4,6 @@ import CabinCard from "@/app/_components/CabinCard";
 async function CabinList() {
 
     const cabins = await getCabins();
-
     if (!cabins.length) return null;
 
     return (
@@ -15,5 +14,4 @@ async function CabinList() {
       </div>
     )
 }
-
 export default CabinList;
