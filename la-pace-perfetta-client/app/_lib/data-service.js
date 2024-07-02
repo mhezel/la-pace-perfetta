@@ -99,17 +99,17 @@ export async function getBookings(guestId) {
   return data;
 }
 
-export async function getBookedDatesByCabinId(cabinId) {
+export async function getBookedDatesByCabinId(cabin_id) {
   let today = new Date();
   today.setUTCHours(0, 0, 0, 0);
   today = today.toISOString();
 
   // Getting all bookings
   const { data, error } = await supabase
-    .from('bookings')
+    .from('tbl_bookings')
     .select('*')
-    .eq('cabinId', cabinId)
-    .or(`startDate.gte.${today},status.eq.checked-in`);
+    .eq('cabin_id', cabin_id)
+    .or(`booking_startDate.gte.${today},booking_status.eq.checked-in`);
 
   if (error) {
     console.error(error);
@@ -130,7 +130,10 @@ export async function getBookedDatesByCabinId(cabinId) {
 }
 
 export async function getSettings() {
-  const { data, error } = await supabase.from('settings').select('*').single();
+  const { data, error } = await supabase.from('tbl_settings').select('*').single();
+
+   // For testing suspense
+  // await new Promise((res) => setTimeout(res, 1000));
 
   if (error) {
     console.error(error);

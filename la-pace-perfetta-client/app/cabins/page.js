@@ -29,13 +29,13 @@ export default function Page({searchParams}) { //searchParams triggers a re-rend
         to paradise.
       </p>
       <div className="flex justify-end mb-8">
-      <Filter/>
+        <Filter/>
       </div>
       
       {/* wrap data-fetching component inside a react-suspense add key prop to the suspense for uniqueness*/}
-      <Suspense fallback={<Spinner/>} key={filter}> 
-        <CabinList filter={filter}/>
-      </Suspense>
+        <Suspense fallback={<Spinner/>} key={filter}> 
+          <CabinList filter={filter}/>
+        </Suspense>
     </div>
   );
 }
