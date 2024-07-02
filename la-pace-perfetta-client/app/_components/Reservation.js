@@ -2,14 +2,12 @@ import DateSelector from "@/app/_components/DateSelector";
 import ReservationForm from "@/app/_components/ReservationForm";
 import { getSettings, getBookedDatesByCabinId } from "@/app/_lib/data-service";
 
-
 async function Reservation({cabin}) {
     const [settings, bookedDates] = await Promise.all([
         getSettings(), 
         getBookedDatesByCabinId(cabin.cabin_id),
       ]);
 
-      
     //Custom styles for DayPicker
     const customDayPickerStyles = {
       day: {
