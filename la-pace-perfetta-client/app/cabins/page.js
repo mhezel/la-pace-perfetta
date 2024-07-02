@@ -1,12 +1,19 @@
 import { Suspense } from "react";
 import CabinList from "../_components/CabinList"
 import Spinner from "../_components/Spinner";
+import Filter from "../_components/Filter";
+
+// export const revalidate = 3600; 
+// needs always in seconds
 
 export const metadata = {
     title: "Cabins",
 }
 
-export default function Page() {
+export default function Page({searchParams}) { //searchParams triggers a re-render in a server component
+
+  //console.log(searchParams);
+  const filter = searchParams?.capacity ?? "all"; //default value
 
   return (
     <div>
@@ -21,9 +28,13 @@ export default function Page() {
         away from home. The perfect spot for a peaceful, calm vacation. Welcome
         to paradise.
       </p>
-      {/* wrap data-fetching component inside a react-suspense */}
-      <Suspense fallback={<Spinner/>}> 
-        <CabinList/>
+      <div className="flex justify-end mb-8">
+      <Filter/>
+      </div>
+      
+      {/* wrap data-fetching component inside a react-suspense add key prop to the suspense for uniqueness*/}
+      <Suspense fallback={<Spinner/>} key={filter}> 
+        <CabinList filter={filter}/>
       </Suspense>
     </div>
   );

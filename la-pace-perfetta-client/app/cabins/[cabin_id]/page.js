@@ -1,30 +1,15 @@
+import TextExpander from "@/app/_components/TextExpander";
 import { getCabin } from "@/app/_lib/data-service";
 import { EyeSlashIcon, MapPinIcon, UsersIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 
+export const revalidate = 3600; //needs always in seconds
 export async function generateMetadata({params}){
     const {cabin_name} = await getCabin(params.cabin_id);
     return {
         title: `Cabin - ${cabin_name}`,
     }
 }
-
-// // Define the getStaticPaths function
-// export async function getStaticPaths() {
-//   const cabins = await getCabin();
-
-//   const paths = cabins.map((cabin) => ({
-//       params: { cabin_id: cabin.cabin_id.toString() }
-//   }));
-
-//   console.log(paths);
-  
-//   return {
-//       paths,
-//       fallback: false, // or 'true' or 'blocking' based on your requirements
-//   };
-
-// }
 
 export default async function Page({params}) {
     const cabin = await getCabin(params.cabin_id);
@@ -45,10 +30,10 @@ export default async function Page({params}) {
 
         <div>
           <h3 className="text-accent-100 font-black text-7xl mb-5 translate-x-[-254px] bg-primary-950 p-6 pb-1 w-[150%]">
-            Cabin {cabin_name}
+          {cabin_name}
           </h3>
 
-          <p className="text-lg text-primary-300 mb-10">{cabin_description}</p>
+          <p className="text-lg text-primary-300 mb-10">{<TextExpander>{cabin_description}</TextExpander>}</p>
 
           <ul className="flex flex-col gap-4 mb-7">
             <li className="flex gap-3 items-center">
@@ -83,3 +68,23 @@ export default async function Page({params}) {
     </div>
   );
 }
+
+
+
+
+// // Define the getStaticPaths function
+// export async function getStaticPaths() {
+//   const cabins = await getCabin();
+
+//   const paths = cabins.map((cabin) => ({
+//       params: { cabin_id: cabin.cabin_id.toString() }
+//   }));
+
+//   console.log(paths);
+  
+//   return {
+//       paths,
+//       fallback: false, // or 'true' or 'blocking' based on your requirements
+//   };
+
+// }
