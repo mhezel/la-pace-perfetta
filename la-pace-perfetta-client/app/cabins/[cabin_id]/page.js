@@ -7,6 +7,7 @@ import Cabin from "@/app/_components/Cabin";
 export const revalidate = 3600; //needs always in seconds
 
 export async function generateMetadata({params}){
+  
     const {cabin_name} = await getCabin(params.cabin_id);
     return {
         title: `Cabin - ${cabin_name}`,

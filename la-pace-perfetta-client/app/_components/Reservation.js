@@ -3,6 +3,7 @@ import ReservationForm from "@/app/_components/ReservationForm";
 import { getSettings, getBookedDatesByCabinId } from "@/app/_lib/data-service";
 
 async function Reservation({cabin}) {
+
     const [settings, bookedDates] = await Promise.all([
         getSettings(), 
         getBookedDatesByCabinId(cabin.cabin_id),
@@ -20,20 +21,19 @@ async function Reservation({cabin}) {
       },
     };
 
-
     return (
-      <div className="grid grid-cols-2 gap-10">
+    <div className="grid grid-cols-2 gap-10">
       <ReservationForm cabin={cabin} />
-      <div className="ml-4"> {/* Adjust the left margin value as needed */}
-          <DateSelector 
-              settings={settings} 
-              bookedDates={bookedDates} 
-              cabin={cabin}
-              styles={customDayPickerStyles}
-          />
-      </div>
-  </div>
-  
+        <div className="ml-4"> {/* Adjust the left margin value as needed */}
+            <DateSelector 
+                settings={settings} 
+                bookedDates={bookedDates} 
+                cabin={cabin}
+                styles={customDayPickerStyles}
+            />
+        </div>
+    </div>
+
   );
 }
 export default Reservation;
