@@ -18,7 +18,7 @@ const authConfig = {
                 async signIn({ user, account, profile }) {
                     try {
                     const existingGuest = await getGuest(user.email);
-                    console.log(existingGuest);
+                    //console.log(existingGuest);
             
                     if (!existingGuest)
                         await createGuest({ guest_email: user.email, guest_fullname: user.name });
@@ -31,7 +31,7 @@ const authConfig = {
                 
                 async session({ session, user }) {
                     const guest = await getGuest(session.user.email);
-                    console.log(guest);
+                    //console.log(guest);
                     session.user.guest_id = guest.guest_id;
                     return session;
                 },

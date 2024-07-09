@@ -9,8 +9,7 @@ export async function getCabin(cabin_id) {
     .eq('cabin_id', cabin_id)
     .single();
 
-  // For testing
-  // await new Promise((res) => setTimeout(res, 1000));
+  //(For testing) => await new Promise((res) => setTimeout(res, 1000));
 
   if (error) {
     console.error(error);
@@ -27,8 +26,7 @@ export async function getCabinPrice(id) {
     .eq('id', id)
     .single();
 
-  // For testing
-  // await new Promise((res) => setTimeout(res, 1000));
+  //(For testing) => await new Promise((res) => setTimeout(res, 1000));
 
   if (error) {
     console.error(error);
@@ -43,8 +41,7 @@ export const getCabins = async function () {
     .select('cabin_id, cabin_name, cabin_max_capacity, cabin_price, cabin_discount, cabin_img')
     .order('cabin_name');
 
-  // For testing suspense
-  // await new Promise((res) => setTimeout(res, 1000));
+  //(For testing) => await new Promise((res) => setTimeout(res, 1000));
 
   if (error) {
     console.error(error);
@@ -66,11 +63,11 @@ export async function getGuest(email) {
   return data;
 }
 
-export async function getBooking(id) {
+export async function getBooking(booking_id) {
   const { data, error, count } = await supabase
-    .from('bookings')
+    .from('tbl_bookings')
     .select('*')
-    .eq('id', id)
+    .eq('booking_id', booking_id)
     .single();
 
   if (error) {

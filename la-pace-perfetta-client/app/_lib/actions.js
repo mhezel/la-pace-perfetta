@@ -4,9 +4,47 @@ import { revalidatePath } from "next/cache"; // manual cache revalidation
 import { auth, signIn, signOut } from "./auth";
 import { supabase } from "./supabase";
 import { getBookings } from "./data-service";
+import { redirect } from "next/navigation";
+
+export async function updateGuestBooking(formData){
+
+    const session = await auth(); //AUTHENTICATION & AUTHORIZATION
+    if(!session) throw new Error ("User must be logged-in");
+
+    const booking_id = Number(formData.get('booking_id'));
+
+        //additional layer for authorization
+        const guestBookings = await getBookings(session.user.guest_id);
+        const guestBookingIds = guestBookings.map((booking) => booking.booking_id);
+    
+        if(!guestBookingIds.includes(booking_id)) 
+            throw new Error("Action update booking is not allowed");
+    
+    const updateData = {
+        booking_numGuests: Number(formData.get('booking_numGuests')),
+        booking_observation: formData.get('booking_observation').slice(0, 1000),
+    };
+    
+    const { error } = await supabase
+    .from('tbl_bookings')
+    .update(updateData)
+    .eq('booking_id', booking_id)
+    .select()
+    .single();
+
+    if (error) {
+        console.error('Supabase error:', error);
+        throw new Error('Guest booking could not be updated');
+      }
+          // manual cache revalidation || re-fetching data
+          revalidatePath(`/account/reservations/edit/${booking_id}`); 
+          revalidatePath("/account/reservations");
+
+    redirect("/account/reservations");
+}
 
 export async function updateGuestProfile(formData){
-    // console.log(formData);
+  
     const session = await auth(); //AUTHENTICATION & AUTHORIZATION
     if(!session) throw new Error ("User must be logged-in");
 

@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { updateGuestProfile } from "../_lib/actions";
 import { useFormStatus } from "react-dom";
+import ButtonClient from "./ButtonClient";
 
 function UpdateProfileForm({children, guest}) {  
     
@@ -65,23 +66,10 @@ function UpdateProfileForm({children, guest}) {
         </div>
 
         <div className="flex justify-end items-center gap-6">
-          <Button/>
+          <ButtonClient pendingLabel="Updating...">Update Profile</ButtonClient>
         </div>
       </form>
     );
 }
-
-function Button(){ //this should be a client component since this is a react-hook
-  const {pending, formData, method} = useFormStatus();
-
-  return(
-    <button 
-    disabled={pending}
-    className="bg-accent-500 px-8 py-4 text-primary-800 font-semibold hover:bg-accent-600 transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300">
-       {!pending ? 'Update profile' : 'Updating...'} 
-    </button>
-  );
-}
-
 
 export default UpdateProfileForm
