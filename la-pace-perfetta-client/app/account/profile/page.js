@@ -1,15 +1,16 @@
 import UpdateProfileForm from "@/app/_components/UpdateProfileForm";
 import SelectCountry from "@/app/_components/SelectCountry";
+import { auth } from "@/app/_lib/auth";
+import { getGuest } from "@/app/_lib/data-service";
 
 export const metadata = {
     title: "Guest-Profile",
 };
 
-export default function Page() {
+export default async function Page() {
 
-  // CHANGE
-  const countryFlag = "pt.jpg";
-  const nationality = "portugal";
+  const session = await auth();
+  const guest = await getGuest(session.user.email);
 
   return (
     <div>
@@ -23,12 +24,12 @@ export default function Page() {
       </p>
           {/* importing server component to a client component 
               render it by pass it as a prop  */}
-      <UpdateProfileForm> 
+      <UpdateProfileForm guest={guest}> 
           <SelectCountry
-            name="nationality"
+            name="guest_nationality"
             id="nationality"
             className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
-            defaultCountry={nationality}
+            defaultCountry={guest.guest_nationality}
           /> 
       </UpdateProfileForm>
     </div>
