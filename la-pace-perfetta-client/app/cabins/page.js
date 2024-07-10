@@ -6,7 +6,6 @@ import ReservationReminder from "../_components/ReservationReminder";
 
 // export const revalidate = 3600; 
 // needs always in seconds
-
 export const metadata = {
     title: "Cabins",
 }

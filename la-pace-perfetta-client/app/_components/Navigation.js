@@ -6,6 +6,8 @@ export default async function Navigation() {
   const session = await auth();
   //console.log(session);
 
+  const user_name = session?.user?.name.split(' ')[0];
+
   return (
     <nav className="z-10 text-xl">
       <ul className="flex gap-16 items-center">
@@ -31,7 +33,7 @@ export default async function Navigation() {
               alt={session.user.name}
               referrerPolicy="no-referrer">
             </img>
-           <span>Guest Area</span>
+            <span>{(session.user) ? `Hello, ${user_name}!`: `Guest Area`}</span>
          </Link>
         ):(
         

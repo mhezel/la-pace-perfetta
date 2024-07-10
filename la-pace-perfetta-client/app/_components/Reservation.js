@@ -12,7 +12,6 @@ async function Reservation({cabin}) {
     ]);
 
     const session = await auth();
-
     // console.log(bookedDates);
 
     return (

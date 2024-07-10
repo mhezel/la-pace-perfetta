@@ -18,7 +18,7 @@ export default async function Page({params}) {
   const cabin = await getCabin(params.cabin_id);
 
   return (
-    <div className="max-w-7xl mx-auto mt-8">
+    <div className="max-w-6xl mx-auto mt-8">
       <Cabin cabin={cabin}/>
         <div>
           <h2 className="text-5xl font-semibold text-center mb-10 text-accent-400">
