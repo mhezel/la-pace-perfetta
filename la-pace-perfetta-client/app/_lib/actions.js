@@ -6,6 +6,41 @@ import { supabase } from "./supabase";
 import { getBookings } from "./data-service";
 import { redirect } from "next/navigation";
 
+export async function createBookingReservation(bookingData, formData){
+    
+    const session = await auth(); //AUTHENTICATION & AUTHORIZATION
+    if(!session) throw new Error ("User must be logged-in");
+
+    // console.log(bookingData);
+
+    const newBooking = {
+        ...bookingData,
+        guest_id: session.user.guest_id,
+        booking_numGuests: Number(formData.get('booking_numGuests')),
+        booking_observation: formData.get('booking_observation').slice(0,1000),
+        booking_extraPrice: 0,
+        booking_totalPrice: bookingData.booking_totalPrice,
+        booking_status: "unconfirmed",
+        booking_isPaid: "false",
+        booking_hasBreakfast: "false",
+    };
+
+    //console.log(newBooking);
+
+    const { error } = await supabase
+        .from('tbl_bookings')
+        .insert([newBooking])
+        // .select()
+        // .single();
+
+        if (error) 
+             throw new Error('Cabin could not be reserved');
+
+    //return data;
+    revalidatePath(`/cabins/${bookingData.cabin_id}`);
+    redirect("/cabins/confirmed");
+}
+
 export async function updateGuestBooking(formData){
 
     const session = await auth(); //AUTHENTICATION & AUTHORIZATION
@@ -33,7 +68,7 @@ export async function updateGuestBooking(formData){
     .single();
 
     if (error) {
-        console.error('Supabase error:', error);
+        //console.error('Supabase error:', error);
         throw new Error('Guest booking could not be updated');
       }
           // manual cache revalidation || re-fetching data

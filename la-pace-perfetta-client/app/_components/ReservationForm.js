@@ -1,10 +1,29 @@
 "use client";
 
+import { createBookingReservation } from "../_lib/actions";
+import ButtonClient from "./ButtonClient";
 import { useReservation } from "./ReservationContext";
+import { differenceInDays } from 'date-fns';
 
 function ReservationForm({ cabin, user }) {
-  const { range } = useReservation();
-  const { cabin_max_capacity } = cabin;
+  const { range, resetRange } = useReservation();
+  const { cabin_max_capacity, cabin_price, cabin_discount, cabin_id } = cabin;
+
+  const startDate = range.from;
+  const endDate = range.to;
+
+  const numNights = differenceInDays(endDate, startDate);
+  const cabin_total_price = numNights * (cabin_price - cabin_discount);
+
+  const bookingData = {
+   booking_startDate: startDate,
+   booking_endDate: endDate,
+   booking_numNights: numNights,
+   booking_totalPrice: cabin_total_price,
+   cabin_id,
+  }; // pass to server action
+
+  const createBookingWithData = createBookingReservation.bind(null, bookingData) //bind function
 
   return (
     <div className="scale-[1.0]">
@@ -23,11 +42,17 @@ function ReservationForm({ cabin, user }) {
         </div>
       </div>
 
-      <form className="bg-primary-900 py-12 px-16 text-lg flex gap-5 flex-col">
+      <form 
+      // action={ createBookingWithData } 
+      action= {async (formData) => {
+        await createBookingWithData(formData);
+        resetRange();
+      }}
+      className="bg-primary-900 py-12 px-16 text-lg flex gap-5 flex-col">
         <div className="space-y-2">
           <label htmlFor="numGuests">How many guests?</label>
           <select
-            name="numGuests"
+            name="booking_numGuests"
             id="numGuests"
             className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
             required
@@ -48,7 +73,7 @@ function ReservationForm({ cabin, user }) {
             Anything we should know about your stay?
           </label>
           <textarea
-            name="observations"
+            name="booking_observation"
             id="observations"
             className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
             placeholder="Any pets, allergies, special requirements, etc.?"
@@ -56,11 +81,12 @@ function ReservationForm({ cabin, user }) {
         </div>
 
         <div className="flex justify-end items-center gap-6">
-          <p className="text-primary-300 text-base">Start by selecting dates</p>
-
-          <button className="bg-accent-500 px-8 py-4 text-primary-800 font-semibold hover:bg-accent-600 transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300">
-            Reserve now
-          </button>
+          {
+          !(startDate && endDate) ? (
+          <p className="text-primary-300 text-base">Start by selecting dates</p> 
+          ) : (
+          <ButtonClient pendingLabel="Reserving">Reserve now</ButtonClient> 
+          )}
         </div>
       </form>
     </div>
