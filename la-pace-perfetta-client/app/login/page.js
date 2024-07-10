@@ -3,7 +3,7 @@ import SignInButton from "../_components/SignInButton";
 export default function Page() {
   return (
 
-    <div className="grid grid-cols-2 gap-10 text-lg items-center justify-center mt-10">
+    <div className="grid grid-cols-2 gap-10 text-lg items-center justify-center m-4">
       <div className="mx-auto">
         <h1 className="text-4xl mb-10 text-accent-400 font-semibold">
           Welcome to La Pace Perfetta!
