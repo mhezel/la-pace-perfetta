@@ -117,8 +117,8 @@ export async function getBookedDatesByCabinId(cabin_id) {
   const bookedDates = data
     .map((booking) => {
       return eachDayOfInterval({
-        start: new Date(booking.startDate),
-        end: new Date(booking.endDate),
+        start: new Date(booking.booking_startDate),
+        end: new Date(booking.booking_endDate),
       });
     })
     .flat();
